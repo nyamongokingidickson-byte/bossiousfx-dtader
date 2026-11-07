@@ -1,18 +1,20 @@
 import { LocalStorageConstants, LocalStorageUtils, URLUtils } from '@deriv-com/utils';
+import { website_name } from '@/utils/site-config';
 import { isStaging } from '../url/helpers';
 
 export const APP_IDS = {
     LOCALHOST: 36300,
     STAGING: 29934,
     PRODUCTION: 132875,
+    DYLANTRADES: '34J0u7zObmeCX5lnl8zm7',
 };
 
 export const livechat_license_id = 12049137;
 export const livechat_client_id = '66aa088aad5a414484c1fd1fa8a5ace7';
 
 export const domain_app_ids = {
-    'dylantrades.site': 132875,
-    'www.dylantrades.site': 132875,
+    'dylantrades.site': APP_IDS.DYLANTRADES,
+    'www.dylantrades.site': APP_IDS.DYLANTRADES,
 };
 
 export const getCurrentProductionDomain = () =>
@@ -54,8 +56,8 @@ export const getDefaultAppIdAndUrl = () => {
     return { app_id, server_url };
 };
 
-export const getAppId = () => {
-    let app_id = null;
+export const getAppId = (): number | string => {
+    let app_id: number | string;
     const current_domain = getCurrentProductionDomain() ?? '';
 
     if (isStaging()) {
@@ -120,6 +122,12 @@ export const generateOAuthURL = () => {
     const { getOauthURL } = URLUtils;
     const oauth_url = getOauthURL();
     const original_url = new URL(oauth_url);
+
+    // Use this site's configured app ID for OAuth as well as WebSocket API requests.
+    // The utility's default OAuth URL may still contain the legacy app ID.
+    original_url.searchParams.set('app_id', String(getAppId()));
+    original_url.searchParams.set('brand', website_name.toLowerCase());
+
     const configured_server_url = (LocalStorageUtils.getValue(LocalStorageConstants.configServerURL) ||
         localStorage.getItem('config.server_url') ||
         original_url.hostname) as string;
