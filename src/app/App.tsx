@@ -20,9 +20,12 @@ const Layout = lazy(() => import('../components/layout'));
 const AppRoot = lazy(() => import('./app-root'));
 
 const { TRANSLATIONS_CDN_URL, R2_PROJECT_NAME, CROWDIN_BRANCH_NAME } = process.env;
-const i18nInstance = initializeI18n({
-    cdnUrl: `${TRANSLATIONS_CDN_URL}/${R2_PROJECT_NAME}/${CROWDIN_BRANCH_NAME}`,
-});
+// Translations CDN is optional; use the built-in English strings when it is not configured.
+const translationsCdnUrl =
+    TRANSLATIONS_CDN_URL && R2_PROJECT_NAME && CROWDIN_BRANCH_NAME
+        ? `${TRANSLATIONS_CDN_URL}/${R2_PROJECT_NAME}/${CROWDIN_BRANCH_NAME}`
+        : '';
+const i18nInstance = initializeI18n({ cdnUrl: translationsCdnUrl });
 
 const router = createBrowserRouter(
     createRoutesFromElements(
