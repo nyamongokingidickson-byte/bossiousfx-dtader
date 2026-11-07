@@ -36,6 +36,20 @@ describe('<Endpoint />', () => {
         expect(localStorage.getItem('config.app_id') ?? '').toBe('123');
     });
 
+    it('should accept an alphanumeric app ID', async () => {
+        render(<Endpoint />);
+
+        const appIdInput = screen.getByTestId('dt_endpoint_app_id_input');
+        const submitButton = screen.getByRole('button', { name: 'Submit' });
+        const appId = '34J0u7zObmeCX5lnl8zm7';
+
+        await userEvent.clear(appIdInput);
+        await userEvent.type(appIdInput, appId);
+        await userEvent.click(submitButton);
+
+        expect(localStorage.getItem('config.app_id')).toBe(appId);
+    });
+
     it('should call getServerInfo and reset the inputs when user clicks on the reset button', async () => {
         render(<Endpoint />);
 
