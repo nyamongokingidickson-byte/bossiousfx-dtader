@@ -11,8 +11,8 @@ export const livechat_license_id = 12049137;
 export const livechat_client_id = '66aa088aad5a414484c1fd1fa8a5ace7';
 
 export const domain_app_ids = {
-    'bossiousfx.vercel.app': 132875,
-    'www.bossiousfx.site': 132875,
+    'dylantrades.site': 132875,
+    'www.dylantrades.site': 132875,
 };
 
 export const getCurrentProductionDomain = () =>
